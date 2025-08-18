@@ -1,0 +1,28 @@
+POST http://localhost:8080/gpt/getRoadmap
+Content-Type:  application/json
+
+{
+    "skill" : "Developpement web",
+    "nbMonth" : 7
+}
+
+###
+POST http://localhost:8080/gpt/emailGenerator
+Content-Type:  application/json
+
+{
+    "objet" : "demande d'annulation du pret et bourse",
+    "destinataire" : "Monsieur Eric, représentant de l'AEF et collège maisonneuve",
+    "langue" : "Français",
+    "contexte" : "J'ai fait une demande d'aide finière au étude que je souhaite annulé parce que je n'ai obtenue que le pret",
+    "objetif" : "Je voudrais qu'il m'aide a anullé au du moins qu'il me donne la proccedure pour annuller",
+    "ton" : "Professionnel",
+    "signiature" : "Jefferson azafack Tsafack"
+    
+}
+
+###
+POST http://localhost:8080/gpt/prompt
+Content-Type:  application/json
+
+["Salue moi c'est Jefferon et toi ?"]
