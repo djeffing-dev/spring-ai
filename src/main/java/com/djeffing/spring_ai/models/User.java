@@ -1,16 +1,19 @@
 package com.djeffing.spring_ai.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
@@ -36,4 +39,8 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private  LocalDateTime updatedAt;
+
+    public User(Long id) {
+        this.id = id;
+    }
 }

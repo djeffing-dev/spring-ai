@@ -1,7 +1,7 @@
 package com.djeffing.spring_ai.services.imp;
 
-import com.djeffing.spring_ai.dtos.EmailGeneratorDto;
 import com.djeffing.spring_ai.dtos.RoadMapDto;
+import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
 import com.djeffing.spring_ai.services.interfaces.GptService;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.client.ChatClient;
@@ -11,10 +11,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 @Service
 public class GptServiceImp implements GptService {
@@ -65,7 +62,7 @@ public class GptServiceImp implements GptService {
     }
 
     @Override
-    public Flux<String> emailGenerator(EmailGeneratorDto emailGeneratorDto) {
+    public String emailGenerator(EmailGeneratorDto emailGeneratorDto) {
         String systemPrompt = """
                 Tu es un expert en communication écrite et en rédaction professionnelle.
                 Ta mission est de rédiger un e-mail clair, structuré et percutant, basé sur les informations fournies par l'utilisateur.
@@ -78,27 +75,40 @@ public class GptServiceImp implements GptService {
                 """;
 
         String userPrompt = """
-            Paramètres fournis : :
+            Paramètres fournis :
             1. Objet du mail : %s
             2. Destinataire: %s
             3. Langue : %s
             4. Context : %s
             5. Ce que je veux obtenir : %s
             6. Ton du mail : %s
-            7. Signature : %s
-            """.formatted(emailGeneratorDto.objet(),
-                emailGeneratorDto.destinataire(),
-                emailGeneratorDto.langue(),
-                emailGeneratorDto.contexte(),
-                emailGeneratorDto.objetif(),
-                emailGeneratorDto.ton(),
-                emailGeneratorDto.signiature());
+            7. Humer : %s
+            8. Style d'email: %s
+            9. taille: %s
+            10. Ajouter des emojies: %s
+            11. Signature (nom) : %s
+            """.formatted(emailGeneratorDto.getObjet(),
+                emailGeneratorDto.getDestinataire(),
+                emailGeneratorDto.getLangue(),
+                emailGeneratorDto.getContent(),
+                emailGeneratorDto.getObjectif(),
+                emailGeneratorDto.getTon(),
+                emailGeneratorDto.getHumer(),
+                emailGeneratorDto.getStyle(),
+                emailGeneratorDto.getTaille(),
+                (emailGeneratorDto.getEmoji()) ? "Oui" : "Non",
+                emailGeneratorDto.getNom());
 
-        return chatClient.prompt()
+        var response = Map.of("content",
+                Objects.requireNonNull(chatClient.prompt().system(systemPrompt)
+                        .user(userPrompt).call().content()));
+
+        /*return chatClient.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
                 .stream()
-                .content();
+                .content();*/
+        return response.get("content");
     }
 
     //Transforme une liste de messages en un format de dictionnaire adapté pour l'API GPT (avec rôles 'user' et 'assistant')

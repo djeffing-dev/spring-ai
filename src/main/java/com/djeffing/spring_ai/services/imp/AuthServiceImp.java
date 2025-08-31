@@ -6,9 +6,7 @@ import com.djeffing.spring_ai.configs.securities.userDetails.UserDetailsImpl;
 import com.djeffing.spring_ai.dtos.jwt.JwtResponse;
 import com.djeffing.spring_ai.dtos.login.LoginRequest;
 import com.djeffing.spring_ai.dtos.register.RegisterRequest;
-import com.djeffing.spring_ai.models.Role;
 import com.djeffing.spring_ai.models.User;
-import com.djeffing.spring_ai.repositories.RoleRepository;
 import com.djeffing.spring_ai.repositories.UserRepository;
 import com.djeffing.spring_ai.services.interfaces.AuthService;
 import com.djeffing.spring_ai.services.interfaces.RoleService;
@@ -21,11 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImp implements AuthService {
@@ -55,6 +49,7 @@ public class AuthServiceImp implements AuthService {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
+
 
         JwtResponse jwtResponse = JwtResponse.builder()
                 .token(jwt)

@@ -1,0 +1,64 @@
+@user_token =eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctYWkiLCJpZCI6MywiZXhwIjoxNzU2Njc2MDIyLCJpYXQiOjE3NTY2NzI0MjIsImVtYWlsIjoidHNhZmFjay5kZXZAZ21haWwuY29tIiwidXNlcm5hbWUiOiJKZWZmMjAyNSJ9.AcukVNpY1eYEePANT_kesJHHcCF8cKRDjBYub3jbkEs
+@moderetor_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctYWkiLCJpZCI6NCwiZXhwIjoxNzU2Njc0MjM0LCJpYXQiOjE3NTY2NzA2MzQsImVtYWlsIjoiZHJha2UuZGV2QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiZHJha2UyMDI1In0.uAd3yx4jPaeYEvAalyulSYQzeamybLTHXMYLs-4g6RE
+@admin_token=
+
+### CREATE EMAIL WITH ADMIN TOKEN
+GET  http://localhost:8080/api/emailGenrator
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+
+### CREATE EMAIL
+POST  http://localhost:8080/api/emailGenrator
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{
+  "nom": "Jefferson Tsafack",
+  "destinataire": "recruteur@entreprise.com",
+  "objet": "Remerciements suite à notre entretien",
+  "context": "Je vous écris pour vous remercier pour l'opportunité d'entretien pour le poste de développeur Full Stack. J'ai beaucoup apprécié notre discussion et l'occasion d'en apprendre davantage sur votre équipe et vos projets.",
+  "objectif": "Remercier le recruteur et réaffirmer mon intérêt pour le poste",
+  "langue": "français",
+  "taille": "moyen",
+  "style": "formel",
+  "ton": "reconnaissant",
+  "humer": "sérieux",
+  "emoji": false
+}
+
+### UPDATE EMAIL
+PUT  http://localhost:8080/api/emailGenrator?id=12
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{
+    "langue": "français",
+    "taille": "court",
+    "style": "amical",
+    "emoji": true
+}
+
+### FIND EMAIL BY ID
+GET  http://localhost:8080/api/emailGenrator/findById?id=7
+Content-Type: application/json
+Authorization: Bearer {{moderetor_token}}
+
+
+### FIND EMAIL BY USER TOKEN
+GET  http://localhost:8080/api/emailGenrator/findByUserToken
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+
+### FIND EMAIL BY USER ID
+GET  http://localhost:8080/api/emailGenrator/findByUserId?id=2
+Content-Type: application/json
+Authorization: Bearer {{moderetor_token}}
+
+
+
+### DELETE EMAIL BY EMAIL ID
+DELETE   http://localhost:8080/api/emailGenrator/deleteById?id=4
+Content-Type: application/json
+Authorization: Bearer {{moderetor_token}}
