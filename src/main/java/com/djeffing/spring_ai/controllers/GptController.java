@@ -3,6 +3,7 @@ package com.djeffing.spring_ai.controllers;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
 import com.djeffing.spring_ai.dtos.RoadMapDto;
 import com.djeffing.spring_ai.services.interfaces.GptService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/gpt/")
+@Hidden
 public class GptController {
     final  private GptService gptService;
 
@@ -33,7 +35,7 @@ public class GptController {
     }
 
     @PostMapping("/prompt")
-    public Flux<String> prompt(@RequestBody List<String> messages){
+    public String prompt(@RequestBody List<String> messages){
         return gptService.prompt(messages);
     }
 

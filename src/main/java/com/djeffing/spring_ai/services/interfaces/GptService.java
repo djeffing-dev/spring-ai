@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface GptService {
     public  Flux<String> getRoadmap(RoadMapDto roadMapDto);
-    public Flux<String> prompt(List<String> messages);
+    public String prompt(List<String> messages);
     public String emailGenerator(EmailGeneratorDto emailGeneratorDto);
 }

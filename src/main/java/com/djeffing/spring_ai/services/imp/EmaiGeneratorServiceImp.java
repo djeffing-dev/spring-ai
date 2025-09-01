@@ -3,6 +3,7 @@ package com.djeffing.spring_ai.services.imp;
 import com.djeffing.spring_ai.configs.exceptions.ErrorException;
 import com.djeffing.spring_ai.configs.securities.userDetails.UserDetailsImpl;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
+import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorRequest;
 import com.djeffing.spring_ai.mappers.emailGenerator.EmailGeneratorMapper;
 import com.djeffing.spring_ai.models.EmailGenerator;
 import com.djeffing.spring_ai.models.User;
@@ -71,8 +72,12 @@ public class EmaiGeneratorServiceImp implements EmaiGeneratorService {
 
 
     @Override
-    public String create(EmailGeneratorDto emailGeneratorDto) {
+    public String create(EmailGeneratorRequest emailGeneratorRequest) {
         UserDetailsImpl userDetails  = auhtenticateUser();
+
+        EmailGeneratorDto emailGeneratorDto = emailGeneratorMapper
+                .emailGeneratorRequestToEmailGeneratorDto(emailGeneratorRequest);
+
         // ✅ Récupération de l'ID utilisateur depuis le token
         emailGeneratorDto.setUser(new User(userDetails.getId()));
         return generateEmailAndSave(emailGeneratorDto);
@@ -87,7 +92,10 @@ public class EmaiGeneratorServiceImp implements EmaiGeneratorService {
 
     // UPDATE EMAIL
     @Override
-    public String update(long emailGenerator_id, EmailGeneratorDto emailGeneratorDto) {
+    public String update(long emailGenerator_id, EmailGeneratorRequest emailGeneratorRequest) {
+        EmailGeneratorDto emailGeneratorDto = emailGeneratorMapper
+                .emailGeneratorRequestToEmailGeneratorDto(emailGeneratorRequest);
+
         EmailGeneratorDto existingDto = findById(emailGenerator_id);
         UserDetailsImpl userDetails  = auhtenticateUser();
 
