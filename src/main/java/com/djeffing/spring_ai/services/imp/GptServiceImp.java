@@ -56,7 +56,7 @@ public class GptServiceImp implements GptService {
     }
 
     @Override
-    public Flux<String> prompt(List<String> messages) {
+    public String prompt(List<String> messages) {
         List<Map<String, String>> conversations = buildConversation(messages);
         return evenStream(conversations);
     }
@@ -124,7 +124,7 @@ public class GptServiceImp implements GptService {
     }
 
     //Gère la génération de la réponse en streaming avec l'API GPT, renvoyant chaque morceau de texte au fur et à mesure
-    private Flux<String> evenStream(List<Map<String, String>> conversation){
+    private String evenStream(List<Map<String, String>> conversation){
         // Conversion de votre liste de Map en une liste de Message de Spring AI
         List<Message> messages = conversation.stream()
                 .map(msgMap -> {
@@ -141,8 +141,13 @@ public class GptServiceImp implements GptService {
                 })
                 .collect(Collectors.toList());
 
-        return chatClient.prompt(new Prompt(messages))
+        var response = Map.of("content",
+                Objects.requireNonNull(chatClient.prompt(new Prompt(messages)).call().content()));
+
+        /*return chatClient.prompt(new Prompt(messages))
                 .stream()
-                .content();
+                .content();*/
+
+        return response.get("content");
     }
 }

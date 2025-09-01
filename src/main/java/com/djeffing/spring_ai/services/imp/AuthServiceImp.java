@@ -6,6 +6,7 @@ import com.djeffing.spring_ai.configs.securities.userDetails.UserDetailsImpl;
 import com.djeffing.spring_ai.dtos.jwt.JwtResponse;
 import com.djeffing.spring_ai.dtos.login.LoginRequest;
 import com.djeffing.spring_ai.dtos.register.RegisterRequest;
+import com.djeffing.spring_ai.dtos.users.UserResponseDto;
 import com.djeffing.spring_ai.models.User;
 import com.djeffing.spring_ai.repositories.UserRepository;
 import com.djeffing.spring_ai.services.interfaces.AuthService;
@@ -38,7 +39,7 @@ public class AuthServiceImp implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
 
@@ -65,13 +66,19 @@ public class AuthServiceImp implements AuthService {
 
 
     @Override
-    public ResponseEntity<?> registerUser(RegisterRequest registerRequest) {
+    public ResponseEntity<UserResponseDto> registerUser(RegisterRequest registerRequest) {
         validateUserNotExists(registerRequest.getEmail());
         User user= buildUser(registerRequest);
         userRepository.save(user);
 
+        UserResponseDto userResponseDto = UserResponseDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
 
-        return ResponseEntity.ok("User registered successfully!");
+
+        return ResponseEntity.ok(userResponseDto);
         }
 
     private User buildUser(RegisterRequest registerRequest){
