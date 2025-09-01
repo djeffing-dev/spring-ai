@@ -1,0 +1,63 @@
+name: Deploy to Cloud Run
+
+env:
+  SERVICE_NAME: custom-spring-ai-api-service
+  PROJECT_ID: app-web-467210
+  DOCKER_IMAGE_URL: us-central1-docker.pkg.dev/app-web-467210/spring-ai-api/custom-spring-ai-api-service
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dockerize-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate unique tag
+        id: tag
+        run: |
+          TAG=${GITHUB_SHA:0:7}
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Google Cloud Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE_URL }}:${{ steps.tag.outputs.TAG }} -f Dockerfile.prod .
+          docker push ${{ env.DOCKER_IMAGE_URL }}:${{ steps.tag.outputs.TAG }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          echo "Deploying service $SERVICE_NAME"
+          gcloud run deploy $SERVICE_NAME \
+            --image ${{ env.DOCKER_IMAGE_URL }}:${{ steps.tag.outputs.TAG }} \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated \
+            --update-env-vars \
+              SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }},\
+              SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }},\
+              SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }},\
+              SPRING_DATASOURCE_DRIVER_CLASS_NAME=${{ secrets.SPRING_DATASOURCE_DRIVER_CLASS_NAME }},\
+              SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION=${{ secrets.SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION }},\
+              APP_JWT_SECRET=${{ secrets.APP_JWT_SECRET }},\
+              SPRING_AI_OPENAI_API_KEY=${{ secrets.SPRING_AI_OPENAI_API_KEY }},\
+              SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL=${{ secrets.SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL }},\
+              SPRING_JPA_HIBERNATE_DDL_AUTO=${{ secrets.SPRING_JPA_HIBERNATE_DDL_AUTO }},\
+              SPRING_SQL_INIT_MODE=${{ secrets.SPRING_SQL_INIT_MODE }},\
+              SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=${{ secrets.SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL }}
