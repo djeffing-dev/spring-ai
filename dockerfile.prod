@@ -1,0 +1,31 @@
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build-stage
+WORKDIR /app
+
+# Copie le fichier pom.xml et télécharge les dépendances
+# Cela permet de réutiliser cette couche dans le cache Docker si les dépendances n'ont pas changé
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copie le code source complet de l'application
+COPY src ./src
+
+# Construit l'application et crée le fichier JAR final
+RUN mvn clean install -DskipTests
+
+# Étape 2 : L'étape de production
+# Utilise une image minimaliste avec seulement l'environnement d'exécution Java (JRE)
+# Cela rend l'image finale beaucoup plus petite et plus sécurisée
+FROM eclipse-temurin:17-jre-alpine AS final-stage
+
+# Crée un utilisateur non-root pour des raisons de sécurité
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring
+
+WORKDIR /app
+EXPOSE 8080
+
+# Copie le fichier JAR du répertoire de l'étape de construction
+# vers le répertoire de travail de cette étape finale
+COPY --from=build-stage /app/target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
