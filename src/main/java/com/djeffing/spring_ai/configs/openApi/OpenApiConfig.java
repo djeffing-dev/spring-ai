@@ -33,7 +33,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 @Server( // Environemnt de production
                         description = "PROD ENV",
-                        url = "https://www.prod.com"
+                        url = "https://custom-spring-ai-api-service-828991456458.us-central1.run.app/"
                 )
         },
         security = @SecurityRequirement(
