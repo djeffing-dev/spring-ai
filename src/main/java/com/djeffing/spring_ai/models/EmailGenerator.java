@@ -26,6 +26,7 @@ public class EmailGenerator {
     private String ton;
     private String humer;
     private  boolean emoji;
+    @Column(columnDefinition = "TEXT") // ✅ Utilise TEXT pour du contenu long
     private  String content;
 
     @ManyToOne

@@ -1,3 +1,110 @@
+### Création d'un tilisateur. Type de role ("user", "admin", "mod")
+### CREATE USER
+
+POST http://localhost:8080/api/auth/signup
+Content-type : application/json
+
+{
+    "username" : "Jeff2025",
+    "email" : "tsafack.dev@gmail.com",
+    "password" : "tsaf12345",
+    "roles" : [
+        "user"
+    ]
+}
+
+
+### CREATE MODERATOR
+POST http://localhost:8080/api/auth/signup
+Content-type : application/json
+
+{
+    "username" : "drake2025",
+    "email" : "drake.dev@gmail.com",
+    "password" : "drake12345",
+    "roles" : [
+        "mod"
+    ]
+}
+
+### CREATE ADMIN
+POST http://localhost:8080/api/auth/signup
+Content-type : application/json
+
+{
+    "username" : "william2025",
+    "email" : "william.dev@gmail.com",
+    "password" : "william12345",
+    "roles" : [
+        "admin"
+    ]
+}
+
+### CONNEXION USER
+POST http://localhost:8080/api/auth/signin
+Content-type : application/json
+
+{
+    "email" : "tsafack.dev@gmail.com",
+    "password" : "tsaf12345"
+}
+
+### CONNEXION MODERATOR
+POST http://localhost:8080/api/auth/signin
+Content-type : application/json
+
+{
+    "email" : "drake.dev@gmail.com",
+    "password" : "drake12345"
+}
+
+
+### CONNEXION ADMIN
+POST http://localhost:8080/api/auth/signin
+Content-type : application/json
+
+{
+    "email" : "william.dev@gmail.com",
+    "password" : "william12345"
+}
+
+### Test endpoint
+### public Endpoint
+GET http://localhost:8080/api/test/all
+Content-type : application/json
+
+
+###
+@user_token =
+@moderetor_token=
+@admin_token=
+
+
+### Endpoint with Role "USER"
+GET http://localhost:8080/api/user
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+
+### Endpoint with Role "MODERATOR"
+GET http://localhost:8080/api/test/mod
+Content-Type: application/json
+Authorization: Bearer {{moderetor_token}}
+
+
+### Endpoint with Role "admin"
+GET http://localhost:8080/api/test/admin
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+
+### Endpoint with Role "admin"
+POST  http://localhost:8080/api/emailGenrator
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+
+### ------------------------------------------------------> TESTE DE ROADMAP api/gpt ------------------------------------------------->
 POST http://localhost:8080/gpt/getRoadmap
 Content-Type:  application/json
 
@@ -6,7 +113,32 @@ Content-Type:  application/json
     "nbMonth" : 7
 }
 
+### Endpoint with Role "admin"
+POST  http://localhost:8080/api/emailGenrator
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{
+  "nom": "Jefferson Tsafack",
+  "destinataire": "marie.martin@exemple.com",
+  "objet": "Proposition de collaboration",
+  "context": "Nous souhaitons établir un partenariat commercial avec votre entreprise dans le domaine du marketing digital",
+  "objectif": "Obtenir un rendez-vous commercial",
+  "langue": "français",
+  "taille": "moyen",
+  "style": "professionnel",
+  "ton": "cordial",
+  "humer": "léger",
+  "emoji": true,
+}
+
 ###
+POST http://localhost:8080/gpt/prompt
+Content-Type:  application/json
+
+["Salue moi c'est Jefferon et toi ?"]
+
+### ------------------------------------------------------> TESTE DE ROADMAP api/gpt ------------------------------------------------->
 POST http://localhost:8080/gpt/emailGenerator
 Content-Type:  application/json
 
@@ -20,9 +152,3 @@ Content-Type:  application/json
     "signiature" : "Jefferson azafack Tsafack"
     
 }
-
-###
-POST http://localhost:8080/gpt/prompt
-Content-Type:  application/json
-
-["Salue moi c'est Jefferon et toi ?"]
