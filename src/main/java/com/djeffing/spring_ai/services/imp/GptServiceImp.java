@@ -90,7 +90,7 @@ public class GptServiceImp implements GptService {
             """.formatted(emailGeneratorDto.getObjet(),
                 emailGeneratorDto.getDestinataire(),
                 emailGeneratorDto.getLangue(),
-                emailGeneratorDto.getContent(),
+                emailGeneratorDto.getContext(),
                 emailGeneratorDto.getObjectif(),
                 emailGeneratorDto.getTon(),
                 emailGeneratorDto.getHumer(),
