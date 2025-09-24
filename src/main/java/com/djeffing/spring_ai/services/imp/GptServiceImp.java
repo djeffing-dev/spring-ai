@@ -96,7 +96,7 @@ public class GptServiceImp implements GptService {
                 emailGeneratorDto.getHumer(),
                 emailGeneratorDto.getStyle(),
                 emailGeneratorDto.getTaille(),
-                (emailGeneratorDto.getEmoji()) ? "Oui" : "Non",
+                emailGeneratorDto.getEmoji(),
                 emailGeneratorDto.getNom());
 
         var response = Map.of("content",
