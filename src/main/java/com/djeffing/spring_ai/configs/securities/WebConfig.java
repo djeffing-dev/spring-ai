@@ -23,8 +23,11 @@ public class WebConfig {
         configuration.setAllowCredentials(true); // Permet l'envoi de cookies, tokens ou authentification dans les requêtes CORS
 
         // Autorise uniquement les requêtes venant de l'application Angular locale
-        //configuration.addAllowedOrigin("http://localhost:4200");
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.addAllowedOrigin("http://192.168.4.24:4200");
+        configuration.addAllowedOrigin("http://192.168.4.33:4200");
+        configuration.addAllowedOrigin("https://angular-ai-iijrcyl6f-jeffingdevs-projects.vercel.app/");
+        configuration.addAllowedOrigin("https://angular-ai-iijrcyl6f-jeffingdevs-projects.vercel.app");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
 

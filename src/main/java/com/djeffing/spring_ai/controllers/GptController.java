@@ -70,8 +70,8 @@ public class GptController {
 
 
     @PostMapping("/emailGenerator-admin-free")
-    @RateLimit(limit = 4, duration = 86400) // 4 requêtes / 24h
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+   // @RateLimit(limit = 4, duration = 86400) // 4 requêtes / 24h
+    //@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @Hidden
     public String emailGeneratorForFreeAdmin(@RequestBody EmailGeneratorRequest emailGeneratorRequest){
         EmailGeneratorDto emailGeneratorDto = emailGeneratorMapper

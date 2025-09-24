@@ -16,5 +16,5 @@ public class EmailGeneratorRequest {
     private String style;
     private String ton;
     private String humer;
-    private  Boolean emoji;
+    private  String emoji;
 }
