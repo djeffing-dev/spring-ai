@@ -26,7 +26,7 @@ public class WebConfig {
         configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedOrigin("http://192.168.4.24:4200");
         configuration.addAllowedOrigin("http://192.168.4.33:4200");
-        configuration.addAllowedOrigin("https://angular-ai-iijrcyl6f-jeffingdevs-projects.vercel.app/");
+        configuration.addAllowedOrigin("https://angular-ai-web-taky-git-main-jeffingdevs-projects.vercel.app/");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
 
