@@ -70,7 +70,10 @@ public class WebSecurityConfig {
                         customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((request)->request
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/v2/api-docs"
+                        .requestMatchers(
+                                "/api/emailGenrator/emailGenerator-admin-free/**",
+                                "/api/emailGenrator/GenerateFreeEmail/**",
+                                "/v2/api-docs"
                                 ,"/v3/api-docs",
                                 "api/gpt/**",
                                 "/v3/api-docs/**",

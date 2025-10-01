@@ -1,5 +1,6 @@
 package com.djeffing.spring_ai.controllers;
 
+import com.djeffing.spring_ai.configs.rateLimit.RateLimit;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorRequest;
 import com.djeffing.spring_ai.services.interfaces.EmaiGeneratorService;
@@ -45,9 +46,44 @@ public class EmailGeneratorController {
             }
     )
     @PostMapping
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')") // Creation reservée au user authentfier
     public String create(@RequestBody EmailGeneratorRequest emailGeneratorRequest){
         return emaiGeneratorService.create(emailGeneratorRequest);
+    }
+
+    @Operation(
+            summary = "Générer un email personnalisé (4/jour, gratuit, sans compte)",
+            description = "Permet de générer un email basé sur des paramètres fournis (contexte, objectif, style, etc.). " +
+                    "L'email est généré automatiquement sans connexion. " +
+                    "Chaque utilisateur a droit à **4 emails par jour**.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Email généré avec succès"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Données d'entrée invalides"
+                    ),
+                    @ApiResponse(
+                            responseCode = "429",
+                            description = "Quota de requêtes dépassé (limite de 4/jour atteinte)"
+                    )
+            }
+    )
+    @PostMapping("/GenerateFreeEmail")
+    @RateLimit(limit = 5, duration = 86400) // 4 requêtes / 24h
+    public String emailGenerator(@RequestBody EmailGeneratorRequest emailGeneratorRequest){
+        return emaiGeneratorService.freeCreate(emailGeneratorRequest);
+    }
+
+    @PostMapping("/emailGenerator-admin-free")
+    //@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @Hidden
+    // Il y a que les Admins qui peuvent utiliser cette fonction
+    public String emailGeneratorForFreeAdmin(@RequestBody EmailGeneratorRequest emailGeneratorRequest){
+        System.out.println("La fonction s'execute------------->");
+        return emaiGeneratorService.freeCreate(emailGeneratorRequest);
     }
 
     @Operation(
@@ -67,7 +103,7 @@ public class EmailGeneratorController {
     )
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    @Hidden // Masqué dans la documentation publique
+    @Hidden // Fonction reserver au administrateur
     public List<EmailGeneratorDto> findAll(){
         return emaiGeneratorService.findAll();
     }
@@ -92,7 +128,7 @@ public class EmailGeneratorController {
             }
     )
     @PutMapping
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')") // Fonction reserver au user connecter
     public String update( @RequestParam long id, @RequestBody EmailGeneratorRequest emailGeneratorRequest){
         return emaiGeneratorService.update(id, emailGeneratorRequest);
     }

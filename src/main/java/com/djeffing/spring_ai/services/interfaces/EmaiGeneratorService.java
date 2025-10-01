@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface EmaiGeneratorService {
     public String create(EmailGeneratorRequest emailGeneratorRequest);
+    public String freeCreate(EmailGeneratorRequest emailGeneratorRequest);
     public List<EmailGeneratorDto> findAll();
     public String update(long emailGenerator_id, EmailGeneratorRequest emailGeneratorRequest);
     public List<EmailGeneratorDto> findByUserId(Long user_id);
