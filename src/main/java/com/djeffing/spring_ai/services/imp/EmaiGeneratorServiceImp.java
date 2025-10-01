@@ -84,6 +84,14 @@ public class EmaiGeneratorServiceImp implements EmaiGeneratorService {
     }
 
     @Override
+    public  String freeCreate(EmailGeneratorRequest emailGeneratorRequest){
+        EmailGeneratorDto emailGeneratorDto = emailGeneratorMapper
+                .emailGeneratorRequestToEmailGeneratorDto(emailGeneratorRequest);
+        return gptService.emailGenerator(emailGeneratorDto);
+    }
+
+
+    @Override
     public List<EmailGeneratorDto> findAll() {
         return emaiGeneratorRepository.findAll().stream()
                 .map(emailGeneratorMapper::toEmailGeneratorDto)

@@ -10,7 +10,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.filter.CorsFilter;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
@@ -31,6 +34,8 @@ public class WebConfig {
         configuration.addAllowedOrigin("https://www.virbray-ai.com/"); // adresse officielle
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.setExposedHeaders(List.of("x-ratelimit-limit", "x-ratelimit-remaining", "x-ratelimit-reset"));
+
 
         // Spécifie les en-têtes HTTP autorisés dans les requêtes CORS
         configuration.setAllowedHeaders(Arrays.asList(

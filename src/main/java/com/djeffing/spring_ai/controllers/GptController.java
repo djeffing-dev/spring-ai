@@ -27,11 +27,9 @@ import java.util.List;
 )
 public class GptController {
     private final GptService gptService;
-    private final EmailGeneratorMapper emailGeneratorMapper;
 
-    public GptController(GptService gptService, EmailGeneratorMapper emailGeneratorMapper) {
+    public GptController(GptService gptService) {
         this.gptService = gptService;
-        this.emailGeneratorMapper = emailGeneratorMapper;
     }
 
     @PostMapping("/getRoadmap")
@@ -40,44 +38,6 @@ public class GptController {
         return gptService.getRoadmap(roadMapDto);
     }
 
-    @Operation(
-            summary = "Générer un email personnalisé (4/jour, gratuit, sans compte)",
-            description = "Permet de générer un email basé sur des paramètres fournis (contexte, objectif, style, etc.). " +
-                    "L'email est généré automatiquement sans connexion. " +
-                    "Chaque utilisateur a droit à **4 emails par jour**.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Email généré avec succès"
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Données d'entrée invalides"
-                    ),
-                    @ApiResponse(
-                            responseCode = "429",
-                            description = "Quota de requêtes dépassé (limite de 4/jour atteinte)"
-                    )
-            }
-    )
-    @PostMapping("/emailGenerator")
-    @RateLimit(limit = 4, duration = 86400) // 4 requêtes / 24h
-    public String emailGenerator(@RequestBody EmailGeneratorRequest emailGeneratorRequest){
-        EmailGeneratorDto emailGeneratorDto = emailGeneratorMapper
-                .emailGeneratorRequestToEmailGeneratorDto(emailGeneratorRequest);
-        return gptService.emailGenerator(emailGeneratorDto);
-    }
-
-
-    @PostMapping("/emailGenerator-admin-free")
-   // @RateLimit(limit = 4, duration = 86400) // 4 requêtes / 24h
-    //@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Hidden
-    public String emailGeneratorForFreeAdmin(@RequestBody EmailGeneratorRequest emailGeneratorRequest){
-        EmailGeneratorDto emailGeneratorDto = emailGeneratorMapper
-                .emailGeneratorRequestToEmailGeneratorDto(emailGeneratorRequest);
-        return gptService.emailGenerator(emailGeneratorDto);
-    }
 
     @Operation(
             summary = "Envoyer un prompt personnalisé à GPT (4/jour, gratuit, sans compte)",
