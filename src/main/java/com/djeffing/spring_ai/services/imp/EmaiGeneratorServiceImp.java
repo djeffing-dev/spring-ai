@@ -61,13 +61,13 @@ public class EmaiGeneratorServiceImp implements EmaiGeneratorService {
         emailGeneratorDto.setContent(fullContent);
         try {
             save(emailGeneratorDto);
+            // Étape 3 : Une fois la sauvegarde réussie, renvoie le contenu sous forme de Flux
+            return fullContent;
+
         } catch (Exception e) {
             System.err.println("❌ Erreur de sauvegarde bloquante -> " + e.getMessage());
             return null; // Renvoie une erreur si la sauvegarde échoue
         }
-
-        // Étape 3 : Une fois la sauvegarde réussie, renvoie le contenu sous forme de Flux
-        return fullContent;
     }
 
 

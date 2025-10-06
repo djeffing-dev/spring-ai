@@ -18,7 +18,9 @@ public class EmailGenerator {
     private String nom;
     private String destinataire;
     private String objet;
+    @Column(columnDefinition = "TEXT") // ✅ Utilise TEXT pour du contenu long
     private String context;
+    @Column(columnDefinition = "TEXT") // ✅ Utilise TEXT pour du contenu long
     private String objectif;
     private  String langue;
     private  String taille;
