@@ -2,6 +2,7 @@ package com.djeffing.spring_ai.services.interfaces;
 
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorRequest;
+import com.djeffing.spring_ai.dtos.emailGenerator.ReplyEmailRequest;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 
@@ -16,5 +17,6 @@ public interface EmaiGeneratorService {
     public List<EmailGeneratorDto> findByUserToken();
     public EmailGeneratorDto findById(long emailGenerator_id);
     public ResponseEntity<?> deleteById(Long emailGenerator_id);
+    public ResponseEntity<String> createReplyEmail(ReplyEmailRequest replyEmailRequest);
 
 }

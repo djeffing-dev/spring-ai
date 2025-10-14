@@ -2,6 +2,7 @@ package com.djeffing.spring_ai.services.imp;
 
 import com.djeffing.spring_ai.dtos.RoadMapDto;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
+import com.djeffing.spring_ai.dtos.emailGenerator.ReplyEmailRequest;
 import com.djeffing.spring_ai.services.interfaces.GptService;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.client.ChatClient;
@@ -147,6 +148,59 @@ public class GptServiceImp implements GptService {
         /*return chatClient.prompt(new Prompt(messages))
                 .stream()
                 .content();*/
+
+        return response.get("content");
+    }
+
+    @Override
+    public String GenerateReplyEmail(ReplyEmailRequest replyEmailRequest){
+        String systemPrompt = """
+                Tu es un assistant expert en rédaction d'emails professionnels et personnels.
+                Ta tâche est de générer une réponse email ou des réponses complète et naturelle basée sur les critères fournis.
+                                
+                RÈGLES IMPORTANTES:
+                1. Génère UNIQUEMENT le contenu de l'email, sans objet ni formule d'introduction ("Voici votre email...")
+                2. Commence directement par la salutation (ex: "Bonjour [Nom],") si c'est nécessaire
+                3. Intègre naturellement tous les points clés mentionnés dans l'objectif
+                4. Adapte la langue, la Longueur, le style, le ton, l'humeur et les emojis selon les paramètres fournis
+                5. Si un paramètre est sur "Auto", choisis la meilleure option selon le contexte
+                6. Termine avec une signature appropriée utilisant le nom de l'expéditeur
+                7. Assure-toi que la réponse soit cohérente avec l'email reçu
+                                
+                FORMAT DE SORTIE:
+                Fournis uniquement le texte de l'email ou de la réponse prêt à être copié-collé, sans commentaires additionnels.
+                """;
+
+        String userPrompt = """
+                CONTEXTE:
+                - Expéditeur (moi): %s
+                - Destinataire: %s
+                - Email reçu: %s
+                                
+                INSTRUCTIONS DE RÉPONSE:
+                Objectif de ma réponse: %s
+                                
+                PARAMÈTRES DE STYLE:
+                - Langue: %s
+                - Longueur: %s
+                - Style: %s
+                - Ton: %s
+                - Humeur: %s
+                - Emojis: %s
+                """.formatted(replyEmailRequest.getName(),
+                replyEmailRequest.getDestinataire(),
+                replyEmailRequest.getReceivedEmail(),
+                replyEmailRequest.getReplayGoal(),
+                replyEmailRequest.getLangue(),
+                replyEmailRequest.getTaille(),
+                replyEmailRequest.getStyle(),
+                replyEmailRequest.getTon(),
+                replyEmailRequest.getHumer(),
+                replyEmailRequest.getEmoji());
+
+        var response = Map.of("content",
+                Objects.requireNonNull(chatClient.prompt().system(systemPrompt)
+                        .user(userPrompt).call().content()));
 
         return response.get("content");
     }

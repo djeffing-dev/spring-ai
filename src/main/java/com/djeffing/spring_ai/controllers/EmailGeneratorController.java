@@ -3,6 +3,7 @@ package com.djeffing.spring_ai.controllers;
 import com.djeffing.spring_ai.configs.rateLimit.RateLimit;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorRequest;
+import com.djeffing.spring_ai.dtos.emailGenerator.ReplyEmailRequest;
 import com.djeffing.spring_ai.services.interfaces.EmaiGeneratorService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,28 @@ public class EmailGeneratorController {
 
     public EmailGeneratorController(EmaiGeneratorService emaiGeneratorService) {
         this.emaiGeneratorService = emaiGeneratorService;
+    }
+
+
+    @Operation(
+            summary = "Générer une réponse email automatique",
+            description = "énère une réponse email personnalisée basée sur les informations fournies par l'utilisateur.\n" +
+                    "        Cette fonctionnalité permet de créer rapidement des réponses professionnelles et adaptées \n" +
+                    "     au contexte de l'email original.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Réponse email générée avec succès"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Données d'entrée invalides"
+                    ),
+            }
+    )
+    @PostMapping("/generate-replyEmail")
+    public ResponseEntity<String> createReplyEmail(@RequestBody ReplyEmailRequest replyEmailRequest){
+        return emaiGeneratorService.createReplyEmail(replyEmailRequest);
     }
 
     @Operation(
@@ -103,7 +126,7 @@ public class EmailGeneratorController {
     )
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    @Hidden // Fonction reserver au administrateur
+    @Hidden // Fonction reserver aux administrateurs
     public List<EmailGeneratorDto> findAll(){
         return emaiGeneratorService.findAll();
     }

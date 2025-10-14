@@ -4,6 +4,7 @@ import com.djeffing.spring_ai.configs.exceptions.ErrorException;
 import com.djeffing.spring_ai.configs.securities.userDetails.UserDetailsImpl;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorDto;
 import com.djeffing.spring_ai.dtos.emailGenerator.EmailGeneratorRequest;
+import com.djeffing.spring_ai.dtos.emailGenerator.ReplyEmailRequest;
 import com.djeffing.spring_ai.mappers.emailGenerator.EmailGeneratorMapper;
 import com.djeffing.spring_ai.models.EmailGenerator;
 import com.djeffing.spring_ai.models.User;
@@ -187,5 +188,12 @@ public class EmaiGeneratorServiceImp implements EmaiGeneratorService {
 
         emaiGeneratorRepository.deleteById(existingDto.getId());
         return ResponseEntity.ok(Map.of("message","Votre mail à été supprimer avec success"));
+    }
+
+    // Fonction permet de generer des reponses d'email
+    @Override
+    public ResponseEntity<String> createReplyEmail(ReplyEmailRequest replyEmailRequest){
+        String response  = gptService.GenerateReplyEmail(replyEmailRequest);
+        return ResponseEntity.ok().body(response);
     }
 }
