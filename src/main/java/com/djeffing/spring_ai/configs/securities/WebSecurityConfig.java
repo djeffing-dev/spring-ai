@@ -73,6 +73,7 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/emailGenrator/emailGenerator-admin-free/**",
                                 "/api/emailGenrator/GenerateFreeEmail/**",
+                                "api/emailGenrator/generate-replyEmail/**",
                                 "/v2/api-docs"
                                 ,"/v3/api-docs",
                                 "api/gpt/**",
