@@ -4,6 +4,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.djeffing.spring_ai.configs.securities.userDetails.UserDetailsImpl;
 import com.djeffing.spring_ai.configs.exceptions.InvalidTokenException;
+import com.djeffing.spring_ai.models.User;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 @Component
 public class JwtUtils {
 
-    @Value("${app.jwtSecret}")
+    @Value("${app.jwt-secret}")
     private String secretKey;
 
     /*@PostConstruct
@@ -39,6 +40,21 @@ public class JwtUtils {
                 .withClaim("id", userPrincipal.getId())
                 .withClaim("username", userPrincipal.getUsername())
                 .withClaim("email", userPrincipal.getEmail())
+                .sign(Algorithm.HMAC256(this.secretKey));
+
+    }
+
+    public String generateJwtTokenByUser(User user){
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 3_600_000); // 1h
+
+        return JWT.create()
+                .withIssuer("spring-ai")
+                .withIssuedAt(now)
+                .withExpiresAt(validity)
+                .withClaim("id", user.getId())
+                .withClaim("username", user.getUsername())
+                .withClaim("email", user.getEmail())
                 .sign(Algorithm.HMAC256(this.secretKey));
 
     }

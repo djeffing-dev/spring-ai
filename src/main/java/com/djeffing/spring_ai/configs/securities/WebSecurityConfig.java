@@ -69,7 +69,7 @@ public class WebSecurityConfig {
                 .sessionManagement((customizer) ->
                         customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((request)->request
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/google/auth/**").permitAll()
                         .requestMatchers(
                                 "/api/emailGenrator/emailGenerator-admin-free/**",
                                 "/api/emailGenrator/GenerateFreeEmail/**",

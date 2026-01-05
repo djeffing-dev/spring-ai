@@ -1,0 +1,42 @@
+spring:
+  # Configuration générale de l'application
+  application:
+    name: spring-ai
+
+  security:
+    oauth2:
+      resourceserver:
+        opaque-token:
+          introspect-uri: https://www.googleapis.com
+          clientId: ${OAUTH_GOOGLE_CLIENTID}
+          clientSecret: ${OAUTH_GOOGLE_CLIENTSECRET}
+
+  # Configuration de l'IA (OpenAI)
+  ai:
+    openai:
+      api-key: ${SPRING_AI_OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+
+  # Configuration de la source de données (PostgreSQL)
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  # Configuration de JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  address: 0.0.0.0
+  port: ${PORT:8080}
+
+app:
+  jwt-secret: ${APP_JWT_SECRET}

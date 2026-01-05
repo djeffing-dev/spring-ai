@@ -259,8 +259,7 @@ public class EmailGeneratorController {
     )
     @DeleteMapping("/deleteById")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<?> deleteById(@RequestParam Long id
-    ){
+    public ResponseEntity<?> deleteById(@RequestParam Long id){
         return emaiGeneratorService.deleteById(id);
     }
 }

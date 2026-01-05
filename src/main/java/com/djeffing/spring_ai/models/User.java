@@ -23,6 +23,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String profilUrl;
+
     private String password;
     private  boolean isActive = false;
 

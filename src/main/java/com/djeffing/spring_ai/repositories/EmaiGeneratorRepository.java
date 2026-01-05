@@ -19,6 +19,8 @@ public interface EmaiGeneratorRepository extends JpaRepository<EmailGenerator, L
 
     // Trouve par user_id ordonné par date de création
     List<EmailGenerator> findByUserIdOrderByCreatedAtDesc(long user_id);
+    // Trouve par user_id ordonné par date de modification
+    List<EmailGenerator> findByUserIdOrderByUpdatedAtDesc(long user_id);
 
     // Compte le nombre d'emails pour un utilisateur
     long countByUserId(long user_id);

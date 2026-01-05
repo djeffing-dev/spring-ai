@@ -11,6 +11,7 @@ public class JwtResponse {
     private String token;
     private String type ="Bearer ";
     private String username;
+    private String profilUrl;
     private String email;
     private List<String> roles;
 }

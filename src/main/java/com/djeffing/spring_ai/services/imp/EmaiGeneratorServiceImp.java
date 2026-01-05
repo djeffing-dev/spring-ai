@@ -164,7 +164,7 @@ public class EmaiGeneratorServiceImp implements EmaiGeneratorService {
 
     @Override
     public List<EmailGeneratorDto> findByUserId(Long user_id) {
-        return emaiGeneratorRepository.findByUserIdOrderByCreatedAtDesc(user_id)
+        return emaiGeneratorRepository.findByUserIdOrderByUpdatedAtDesc(user_id)
                 .stream().map(emailGeneratorMapper::toEmailGeneratorDto)
                 .collect(Collectors.toList());
     }

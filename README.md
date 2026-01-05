@@ -48,7 +48,7 @@ cd spring-ai
 Configurer le fichier `application.properties` :
 
 ```bash
-cp src/main/resources/application.example.properties src/main/resources/application.properties
+cp src/main/resources/application.example.properties src/main/resources/application.yaml
 ```
 
 👉 Ajouter votre clé d’API OpenAI dans le fichier.

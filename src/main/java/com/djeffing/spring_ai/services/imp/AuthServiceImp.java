@@ -58,6 +58,7 @@ public class AuthServiceImp implements AuthService {
                 .email(userDetails.getEmail())
                 .username(userDetails.getUsername())
                 .roles(roles)
+                .profilUrl(userRepository.findByEmail(userDetails.getEmail()).get().getProfilUrl())
                 .build();
 
         return ResponseEntity.ok(jwtResponse);
